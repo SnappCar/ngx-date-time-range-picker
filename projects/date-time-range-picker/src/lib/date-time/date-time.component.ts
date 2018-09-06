@@ -11,6 +11,9 @@ import {
 } from '@angular/core';
 import * as moment_ from 'moment';
 import { DateTimeRange } from '../models/date-time-range';
+import {Observable, of, ReplaySubject, Subject} from "rxjs";
+import {tap} from "rxjs/internal/operators";
+import {TimeSegment} from "../models/time-segment";
 const moment = moment_;
 
 @Component({
@@ -23,6 +26,8 @@ const moment = moment_;
 export class DateTimeComponent implements OnInit, OnChanges {
   @Input()
   monthUnavailabilities: DateTimeRange[] = [];
+  @Input()
+  getUnavailableTimesForDate: (date: Date) => Observable<TimeSegment[]>;
   @Input()
   startFrom: Date;
   @Input()
@@ -58,21 +63,39 @@ export class DateTimeComponent implements OnInit, OnChanges {
 
   // Time component needs:
   timeUnavailabilities: DateTimeRange[] = [];
+  unavailableTimesForDay = new ReplaySubject<TimeSegment[]>();
 
-  constructor() {}
+  constructor() {
+  }
 
   ngOnInit() {
+    if(!this.getUnavailableTimesForDate){
+      this.getUnavailableTimesForDate = () => of([]);
+    }
     this.setupSelectDateTime();
+    this.emitUnavailableTimes();
   }
 
   ngOnChanges() {
     this.setupSelectDateTime();
   }
 
+  emitUnavailableTimes(){
+    if(this.selectedDate){
+      this.getUnavailableTimesForDate(this.selectedDate)
+        .pipe(tap(unavailableTimes => {
+          this.unavailableTimesForDay.next(unavailableTimes);
+        }))
+        .subscribe();
+    }
+  }
+
   onDayMonthSelected(selectedDate: Date): void {
     this.calcuateTimeUnavailabilities(selectedDate);
     this.activeMoment = moment(selectedDate);
     this.selectedDate = selectedDate;
+
+    this.emitUnavailableTimes();
 
     this.dateSelected = true;
     this.hideDatePicker();

@@ -4,14 +4,16 @@
             {{translationService.getTranslation('from')}}
         </span>
         <ngx-date-time [monthUnavailabilities]='startMonthUnavailability' [selectedDate]='selectedStart' (monthChanged)='onStartMonthChanged($event)'
-            (dateTimeSelected)='onDateTimeFromSelected($event)' [isOpen]='openStart' (opened)='startOpened()'></ngx-date-time>
+                       (dateTimeSelected)='onDateTimeFromSelected($event)' [isOpen]='openStart'
+                       [getUnavailableTimesForDate]="getUnavailableTimesForDate" (opened)='startOpened()'></ngx-date-time>
     </div>
     <div class="input-holder to">
         <span class="input-label">
             {{translationService.getTranslation('until')}}
         </span>
         <ngx-date-time [monthUnavailabilities]='endMonthUnavailability' [selectedDate]='selectedEnd' [startFrom]='selectedStart'
-            (monthChanged)='onEndMonthChanged($event)' (dateTimeSelected)='onDateTimeUntilSelected($event)' [isOpen]='openEnd'
-            (opened)='endOpened()'></ngx-date-time>
+                       (monthChanged)='onEndMonthChanged($event)'
+                       [getUnavailableTimesForDate]="getUnavailableTimesForDate" (dateTimeSelected)='onDateTimeUntilSelected($event)' [isOpen]='openEnd'
+                       (opened)='endOpened()'></ngx-date-time>
     </div>
 </div>

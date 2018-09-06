@@ -9,6 +9,6 @@
     <div class="input-container time-container">
         <input type="text" id="timePicker" (click)='toggleTimePicker()' value="{{(timeSelected && (activeMoment | date:'shortTime')) || '...' }}"
             [disabled]='!dateSelected || isDisabled' [class.focused]='isTimePickerShown'>
-        <ngx-time *ngIf='isTimePickerShown' [unavailabilities]='timeUnavailabilities' [selectedDate]='selectedDate' (timeSelected)='onTimeSelected($event)'></ngx-time>
+        <ngx-time *ngIf='isTimePickerShown' [unavailabilities]='timeUnavailabilities' [unavailableTimes]="unavailableTimesForDay" [selectedDate]='selectedDate' (timeSelected)='onTimeSelected($event)'></ngx-time>
     </div>
 </div>

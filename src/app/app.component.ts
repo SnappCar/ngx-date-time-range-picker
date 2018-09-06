@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DateTimeRange } from 'projects/date-time-range-picker/src/public_api';
 import { Observable, of } from 'rxjs';
+import * as moment from "moment";
+import { TimeSegment } from "projects/date-time-range-picker/src/public_api";
 
 @Component({
   selector: 'app-root',
@@ -60,6 +62,47 @@ export class AppComponent implements OnInit {
   public onGetMonthUnavailability = (date: Date): Observable<DateTimeRange[]> => {
     const unavailabilityToReturn = this.unavailability[date.getMonth()];
     return of(unavailabilityToReturn);
+  };
+
+  public onGetUnavailableTimesForDate(date: Date): Observable<TimeSegment[]>{
+    if(moment(date).isoWeekday() === 7){
+      return of([
+        {
+          hour: 12,
+          minute: 0,
+          isBlocked: true
+        }
+      ]);
+    }
+
+
+    if(moment(date).isoWeekday() === 3){
+      return of([
+        {
+          hour: 14,
+          minute: 0,
+          isBlocked: true
+        },
+        {
+          hour: 14,
+          minute: 30,
+          isBlocked: true
+        },
+        {
+          hour: 15,
+          minute: 0,
+          isBlocked: true
+        },
+
+        {
+          hour: 15,
+          minute: 30,
+          isBlocked: true
+        }
+      ]);
+    }
+
+    return of([]);
   }
 
   ngOnInit() {}

@@ -4,6 +4,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { TimeComponent } from './time.component';
+import {TimeSegment} from "../models/time-segment";
+import {Subject} from "rxjs";
 
 describe('TimeComponent', () => {
   let component: TimeComponent;
@@ -23,6 +25,7 @@ describe('TimeComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TimeComponent);
     component = fixture.componentInstance;
+    component.unavailableTimes = new Subject<TimeSegment[]>();
     component.selectedDate = new Date(2018, 6, 26);
     component.unavailabilities = [
       { start: new Date(2018, 6, 25, 10, 0), end: new Date(2018, 6, 26, 11, 0) },
@@ -34,6 +37,25 @@ describe('TimeComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should make times unavailable based on alwaysUnavailableTimes', () => {
+    const optionThatShouldNotYetBeBlocked = component
+      .timeOptions
+      .filter(timeoption => timeoption.hour === 12 && timeoption.minute === 30)[0];
+
+    component.unavailableTimes.next([{
+      hour:12,
+      minute: 30,
+      isBlocked: true
+    }]);
+
+    const optionThatShouldBeBlocked = component
+      .timeOptions
+      .filter(timeoption => timeoption.hour === 12 && timeoption.minute === 30)[0];
+
+    expect(optionThatShouldNotYetBeBlocked.isBlocked).toBe(false);
+    expect(optionThatShouldBeBlocked.isBlocked).toBe(true);
   });
 
   it('should show all options in a day', () => {

@@ -11,3 +11,4 @@ export * from './lib/models/day-state';
 export * from './lib/month/month.component';
 export * from './lib/time/time.component';
 export * from './lib/translation.service';
+export {TimeSegment} from "./lib/models/time-segment";

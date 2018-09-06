@@ -41,7 +41,7 @@ fdescribe('MonthComponent', () => {
 
   describe('render', () => {
     it('should show the correct amount of days', () => {
-      const numberOfDays = moment().daysInMonth();
+      const numberOfDays =  moment(component.selectedDate).daysInMonth();
       fixture.detectChanges();
 
       const monthDays = fixture.debugElement.queryAll(By.css('.month-day'));

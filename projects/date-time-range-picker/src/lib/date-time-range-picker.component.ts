@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import * as moment_ from 'moment';
-import { Observable } from 'rxjs';
+import {Observable, of} from "rxjs";
 import { take } from 'rxjs/operators';
 import { DateTimeRange } from './models/date-time-range';
 import { DTRPTranslationService } from './translation.service';
+import { TimeSegment } from "./models/time-segment";
 const moment = moment_;
 
 @Component({
@@ -19,6 +20,9 @@ export class DateTimeRangePickerComponent implements OnInit {
   selectedEnd: Date;
   @Input()
   getMonthUnavailability: (date: Date) => Observable<DateTimeRange[]>;
+  @Input()
+  getUnavailableTimesForDate?: (date: Date) => Observable<TimeSegment[]>;
+
   @Output()
   dateTimeRangeSelected = new EventEmitter<DateTimeRange>();
 
@@ -31,6 +35,10 @@ export class DateTimeRangePickerComponent implements OnInit {
   constructor(public translationService: DTRPTranslationService) {}
 
   ngOnInit() {
+    if(!this.getUnavailableTimesForDate){
+      this.getUnavailableTimesForDate = () => of([]);
+    }
+
     this.getMonthUnavailability(this.selectedStart || moment().toDate())
       .pipe(take(1))
       .subscribe((unavailability: DateTimeRange[]) => {
