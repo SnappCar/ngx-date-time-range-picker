@@ -1,7 +1,8 @@
-import {Time} from "@angular/common";
+import { Time } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -9,12 +10,12 @@ import {
   OnInit,
   Output,
   ViewEncapsulation
-} from "@angular/core";
-import * as moment_ from "moment";
-import {DateTimeRange} from "../models/date-time-range";
-import {Subject} from "rxjs";
-import {tap} from "rxjs/internal/operators";
-import {TimeSegment} from "../models/time-segment";
+} from '@angular/core';
+import * as moment_ from 'moment';
+import { Subject } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { DateTimeRange } from '../models/date-time-range';
+import { TimeSegment } from '../models/time-segment';
 
 const moment = moment_;
 
@@ -40,8 +41,7 @@ export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
 
   alwaysUnavailableTimes: TimeSegment[];
 
-  constructor() {
-  }
+  constructor(private ref: ChangeDetectorRef) {}
 
   ngOnChanges() {
     this.initializeTimeSegments();
@@ -157,11 +157,9 @@ export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
 
   private makeTimesBlocked(startTime: Time, endTime: Time): any {
     this.timeOptions = this.timeOptions.map((timeOption: TimeSegment) => {
-
-      if (this.checkIfBlock(timeOption.hour, timeOption.minute)){
+      if (this.checkIfBlock(timeOption.hour, timeOption.minute)) {
         timeOption.isBlocked = true;
-      }
-      else if (timeOption.hour === startTime.hours && timeOption.minute >= startTime.minutes) {
+      } else if (timeOption.hour === startTime.hours && timeOption.minute >= startTime.minutes) {
         timeOption.isBlocked = true;
       } else if (timeOption.hour === endTime.hours && timeOption.minute <= endTime.minutes) {
         timeOption.isBlocked = true;
@@ -184,7 +182,7 @@ export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
       const halfTimeSegment: TimeSegment = {
         hour: i,
         minute: 30,
-        isBlocked:  this.checkIfBlock(i, 30)
+        isBlocked: this.checkIfBlock(i, 30)
       };
 
       times.push(fixedTimeSegment);
@@ -192,15 +190,16 @@ export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     this.timeOptions = [...times];
+    this.ref.markForCheck();
   }
 
-  private checkIfBlock(hour:number, minute: number) {
-    if(!this.alwaysUnavailableTimes){
+  private checkIfBlock(hour: number, minute: number) {
+    if (!this.alwaysUnavailableTimes) {
       return false;
     }
     for (let i = 0; i < this.alwaysUnavailableTimes.length; i++) {
       const blockedTime = this.alwaysUnavailableTimes[i];
-      if(blockedTime.hour === hour && blockedTime.minute === minute){
+      if (blockedTime.hour === hour && blockedTime.minute === minute) {
         return true;
       }
     }
@@ -218,12 +217,13 @@ export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   private initUnavailableTimes() {
-    this.unavailableTimes.pipe(
-      tap(times => {
-        this.alwaysUnavailableTimes = times;
-        this.initializeTimeSegments();
+    this.unavailableTimes
+      .pipe(
+        tap(times => {
+          this.alwaysUnavailableTimes = times;
+          this.initializeTimeSegments();
         })
-    ).subscribe();
+      )
+      .subscribe();
   }
 }
-

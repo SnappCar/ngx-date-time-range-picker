@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "build_lib": "ng build --prod date-time-range-picker",
-    "npm_pack": "cd dist/date-time-range-picker && npm pack",
+    "npm_pack": "cd dist/@snappcar/date-time-range-picker && npm pack",
     "package": "npm run build_lib && npm run npm_pack",
     "ng": "ng",
     "start": "ng serve",
