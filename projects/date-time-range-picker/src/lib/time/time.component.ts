@@ -105,6 +105,8 @@ export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
         }
       }
     }
+
+    this.ref.markForCheck();
   }
 
   private handleUnavailabilityWithinTheDay(unavailability: DateTimeRange): any {
@@ -190,7 +192,6 @@ export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     this.timeOptions = [...times];
-    this.ref.markForCheck();
   }
 
   private checkIfBlock(hour: number, minute: number) {
@@ -221,7 +222,7 @@ export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
       .pipe(
         tap(times => {
           this.alwaysUnavailableTimes = times;
-          this.initializeTimeSegments();
+          this.ngOnChanges();
         })
       )
       .subscribe();
