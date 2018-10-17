@@ -1,5 +1,6 @@
-<ul class="time-list">
+<ul class="time-list" ngxClickOutside (clickOutside)="close()">
   <li *ngFor='let timeOption of timeOptions' class="time-list-item" [ngClass]="{'disabled': timeOption.isBlocked, 'selected': timeOption.hour === selectedTimeOption?.hour && timeOption.minute === selectedTimeOption?.minute }"
-    (click)="onTimeSelected(timeOption)" id="{{ timeOption.hour + ':' + timeOption.minute}}">{{timeOption.hour | number:'2.0-0'}}:{{timeOption.minute
+    (click)="onTimeSelected(timeOption)" id="{{ timeOption.hour + ':' + timeOption.minute}}">{{timeOption.hour |
+    number:'2.0-0'}}:{{timeOption.minute
     | number:'2.0-0'}}</li>
 </ul>

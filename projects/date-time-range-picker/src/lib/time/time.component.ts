@@ -35,6 +35,8 @@ export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
   selectedDate: Date;
   @Output()
   timeSelected = new EventEmitter<Time>();
+  @Output()
+  dismissed = new EventEmitter();
 
   public selectedTimeOption: TimeSegment;
   timeOptions: TimeSegment[];
@@ -66,12 +68,17 @@ export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
     }
   }
 
+  close(): void {
+    this.dismissed.emit();
+  }
+
   private scrollToSelectedTime(): void {
     if (document) {
       let el: any;
       if (
         this.selectedTimeOption &&
-        (this.selectedTimeOption.minute === 0 || this.selectedTimeOption.minute === 30)
+        (this.selectedTimeOption.minute === 0 ||
+          this.selectedTimeOption.minute === 30)
       ) {
         el = document.getElementById(
           `${this.selectedTimeOption.hour}:${this.selectedTimeOption.minute}`
@@ -80,7 +87,11 @@ export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
         el = document.getElementById('13:30');
       }
       if (el && el.scrollIntoView) {
-        el.scrollIntoView({ behavior: 'instant', block: 'center', inline: 'nearest' });
+        el.scrollIntoView({
+          behavior: 'instant',
+          block: 'center',
+          inline: 'nearest'
+        });
       }
     }
   }
@@ -121,7 +132,9 @@ export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
     this.makeTimesBlocked(startTime, endTime);
   }
 
-  private handleUnavailabilityOverlappingEndOfDay(unavailability: DateTimeRange): any {
+  private handleUnavailabilityOverlappingEndOfDay(
+    unavailability: DateTimeRange
+  ): any {
     const startTime: Time = {
       hours: unavailability.start.getHours(),
       minutes: unavailability.start.getMinutes()
@@ -133,7 +146,9 @@ export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
     this.makeTimesBlocked(startTime, endTime);
   }
 
-  private handleUnavailabilityOverlappingBeginOfDay(unavailability: DateTimeRange): any {
+  private handleUnavailabilityOverlappingBeginOfDay(
+    unavailability: DateTimeRange
+  ): any {
     const startTime: Time = {
       hours: 0,
       minutes: 0
@@ -161,11 +176,20 @@ export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
     this.timeOptions = this.timeOptions.map((timeOption: TimeSegment) => {
       if (this.checkIfBlock(timeOption.hour, timeOption.minute)) {
         timeOption.isBlocked = true;
-      } else if (timeOption.hour === startTime.hours && timeOption.minute >= startTime.minutes) {
+      } else if (
+        timeOption.hour === startTime.hours &&
+        timeOption.minute >= startTime.minutes
+      ) {
         timeOption.isBlocked = true;
-      } else if (timeOption.hour === endTime.hours && timeOption.minute <= endTime.minutes) {
+      } else if (
+        timeOption.hour === endTime.hours &&
+        timeOption.minute <= endTime.minutes
+      ) {
         timeOption.isBlocked = true;
-      } else if (timeOption.hour > startTime.hours && timeOption.hour < endTime.hours) {
+      } else if (
+        timeOption.hour > startTime.hours &&
+        timeOption.hour < endTime.hours
+      ) {
         timeOption.isBlocked = true;
       }
 
