@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper" ngxClickOutside (clickOutside)="close()">
   <div class="header">
     <div class="year">
       {{year}}
@@ -30,8 +30,10 @@
   </div>
 
   <div class="month-grid">
-    <span *ngFor="let day of days" [class.day-before]="day.dummyBefore" [class.day-after]="day.dummyAfter" [class.month-day]="!(day.dummyBefore || day.dummyAfter)">
-      <ngx-day [value]="day.value" [status]="day.status" [hovered]="day.hovered" (hoverDay)="dayHovered($event)" (selectDay)="daySelected($event)"></ngx-day>
+    <span *ngFor="let day of days" [class.day-before]="day.dummyBefore" [class.day-after]="day.dummyAfter"
+      [class.month-day]="!(day.dummyBefore || day.dummyAfter)">
+      <ngx-day [value]="day.value" [status]="day.status" [hovered]="day.hovered" (hoverDay)="dayHovered($event)"
+        (selectDay)="daySelected($event)"></ngx-day>
     </span>
   </div>
 
