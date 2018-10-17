@@ -15,10 +15,12 @@ export class ClickOutsideDirective {
 
   @HostListener('document:click', ['$event.target'])
   public onClick(targetElement): void {
+    const isDayBlock = targetElement.classList.contains('day-block');
+    const isTimeBlock = targetElement.classList.contains('time-list-item');
     const isParentInput =
       targetElement.id === 'datePicker' || targetElement.id === 'timePicker';
     const clickedInside = this.elementRef.nativeElement.contains(targetElement);
-    if (!clickedInside && !isParentInput) {
+    if (!clickedInside && !isParentInput && !isDayBlock && !isTimeBlock) {
       this.clickOutside.emit();
     }
   }
