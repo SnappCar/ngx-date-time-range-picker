@@ -10,10 +10,10 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import * as moment_ from 'moment';
+import { Observable, of, ReplaySubject } from 'rxjs';
+import { tap } from 'rxjs/internal/operators';
 import { DateTimeRange } from '../models/date-time-range';
-import {Observable, of, ReplaySubject, Subject} from "rxjs";
-import {tap} from "rxjs/internal/operators";
-import {TimeSegment} from "../models/time-segment";
+import { TimeSegment } from '../models/time-segment';
 const moment = moment_;
 
 @Component({
@@ -65,11 +65,10 @@ export class DateTimeComponent implements OnInit, OnChanges {
   timeUnavailabilities: DateTimeRange[] = [];
   unavailableTimesForDay = new ReplaySubject<TimeSegment[]>();
 
-  constructor() {
-  }
+  constructor() {}
 
   ngOnInit() {
-    if(!this.getUnavailableTimesForDate){
+    if (!this.getUnavailableTimesForDate) {
       this.getUnavailableTimesForDate = () => of([]);
     }
     this.setupSelectDateTime();
@@ -80,12 +79,14 @@ export class DateTimeComponent implements OnInit, OnChanges {
     this.setupSelectDateTime();
   }
 
-  emitUnavailableTimes(){
-    if(this.selectedDate){
+  emitUnavailableTimes() {
+    if (this.selectedDate) {
       this.getUnavailableTimesForDate(this.selectedDate)
-        .pipe(tap(unavailableTimes => {
-          this.unavailableTimesForDay.next(unavailableTimes);
-        }))
+        .pipe(
+          tap(unavailableTimes => {
+            this.unavailableTimesForDay.next(unavailableTimes);
+          })
+        )
         .subscribe();
     }
   }
@@ -139,6 +140,14 @@ export class DateTimeComponent implements OnInit, OnChanges {
     }
   }
 
+  public hideTimePicker(): void {
+    this.isTimePickerShown = false;
+  }
+
+  public hideDatePicker(): void {
+    this.isDatePickerShown = false;
+  }
+
   private setupSelectDateTime() {
     if (this.selectedDate) {
       this.activeMoment = moment(this.selectedDate);
@@ -149,14 +158,6 @@ export class DateTimeComponent implements OnInit, OnChanges {
       this.dateSelected = false;
       this.timeSelected = false;
     }
-  }
-
-  private hideTimePicker(): void {
-    this.isTimePickerShown = false;
-  }
-
-  private hideDatePicker(): void {
-    this.isDatePickerShown = false;
   }
 
   private showTimePicker(): void {
@@ -180,8 +181,10 @@ export class DateTimeComponent implements OnInit, OnChanges {
       const endMoment = moment(unavailability.end);
 
       if (
-        (startMoment.isBefore(selectedDay, 'day') || startMoment.isSame(selectedDay, 'day')) &&
-        (endMoment.isAfter(selectedDay, 'day') || endMoment.isSame(selectedDay, 'day'))
+        (startMoment.isBefore(selectedDay, 'day') ||
+          startMoment.isSame(selectedDay, 'day')) &&
+        (endMoment.isAfter(selectedDay, 'day') ||
+          endMoment.isSame(selectedDay, 'day'))
       ) {
         newTimeUnavailabilities.push(unavailability);
       }
@@ -190,12 +193,18 @@ export class DateTimeComponent implements OnInit, OnChanges {
     if (selectedDay.isSame(now, 'day')) {
       const startMoment = moment().startOf('day');
       const endMoment = moment().add(1, 'minutes');
-      newTimeUnavailabilities.push({ start: startMoment.toDate(), end: endMoment.toDate() });
+      newTimeUnavailabilities.push({
+        start: startMoment.toDate(),
+        end: endMoment.toDate()
+      });
     }
     if (selectedDay.isSame(this.startFrom, 'day')) {
       const startMoment = moment(this.startFrom).startOf('day');
       const endMoment = moment(this.startFrom).add(1, 'minutes');
-      newTimeUnavailabilities.push({ start: startMoment.toDate(), end: endMoment.toDate() });
+      newTimeUnavailabilities.push({
+        start: startMoment.toDate(),
+        end: endMoment.toDate()
+      });
     }
 
     this.timeUnavailabilities = [...newTimeUnavailabilities];

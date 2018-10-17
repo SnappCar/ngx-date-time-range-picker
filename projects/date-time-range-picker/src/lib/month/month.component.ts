@@ -33,6 +33,8 @@ export class MonthComponent implements OnInit, OnChanges {
   dateSelected = new EventEmitter<Date>();
   @Output()
   monthChanged = new EventEmitter<Date>();
+  @Output()
+  dismissed = new EventEmitter();
 
   days: Day[];
 
@@ -114,6 +116,10 @@ export class MonthComponent implements OnInit, OnChanges {
     this.dateSelected.emit(this.activeMoment.date(day).toDate());
   }
 
+  close(): void {
+    this.dismissed.emit();
+  }
+
   private fillMonthDays(date: moment_.Moment): void {
     const daysInMonth = date.daysInMonth();
 
@@ -172,7 +178,9 @@ export class MonthComponent implements OnInit, OnChanges {
       return !this.fullDays.includes(value);
     });
     this.freeDays = this.freeDays.filter((value: number) => {
-      return !(this.partialDays.includes(value) || this.fullDays.includes(value));
+      return !(
+        this.partialDays.includes(value) || this.fullDays.includes(value)
+      );
     });
   }
 
@@ -284,7 +292,12 @@ export class MonthComponent implements OnInit, OnChanges {
 
     const dummyDaysBefore: Day[] = [];
     for (let i = 0; i < daysInPreviousMonth; i++) {
-      const newDay: Day = { value: 0, status: DayState.Dummy, hovered: false, dummyBefore: true };
+      const newDay: Day = {
+        value: 0,
+        status: DayState.Dummy,
+        hovered: false,
+        dummyBefore: true
+      };
 
       dummyDaysBefore.push(newDay);
     }
@@ -300,7 +313,12 @@ export class MonthComponent implements OnInit, OnChanges {
 
     const dummyDaysAfter: Day[] = [];
     for (let i = 0; i < daysInNextMonth; i++) {
-      const newDay: Day = { value: 0, status: DayState.Dummy, hovered: false, dummyAfter: true };
+      const newDay: Day = {
+        value: 0,
+        status: DayState.Dummy,
+        hovered: false,
+        dummyAfter: true
+      };
 
       dummyDaysAfter.push(newDay);
     }
