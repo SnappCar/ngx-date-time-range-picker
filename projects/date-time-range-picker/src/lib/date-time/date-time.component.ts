@@ -40,7 +40,6 @@ export class DateTimeComponent implements OnInit, OnChanges {
   placeholder: string;
   @Input()
   set isOpen(shouldBeOpen: boolean) {
-    console.log('Should be open?', shouldBeOpen);
     if (shouldBeOpen) {
       if (!this.isTimePickerShown) {
         this.showDatePicker();
