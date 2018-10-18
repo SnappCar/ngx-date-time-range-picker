@@ -1,10 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewEncapsulation
+} from '@angular/core';
 import * as moment_ from 'moment';
-import {Observable, of} from "rxjs";
+import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { DateTimeRange } from './models/date-time-range';
+import { TimeSegment } from './models/time-segment';
 import { DTRPTranslationService } from './translation.service';
-import { TimeSegment } from "./models/time-segment";
 const moment = moment_;
 
 @Component({
@@ -18,6 +25,8 @@ export class DateTimeRangePickerComponent implements OnInit {
   selectedStart: Date;
   @Input()
   selectedEnd: Date;
+  @Input()
+  labelsAsPlaceholders: boolean;
   @Input()
   getMonthUnavailability: (date: Date) => Observable<DateTimeRange[]>;
   @Input()
@@ -35,7 +44,7 @@ export class DateTimeRangePickerComponent implements OnInit {
   constructor(public translationService: DTRPTranslationService) {}
 
   ngOnInit() {
-    if(!this.getUnavailableTimesForDate){
+    if (!this.getUnavailableTimesForDate) {
       this.getUnavailableTimesForDate = () => of([]);
     }
 
@@ -58,7 +67,10 @@ export class DateTimeRangePickerComponent implements OnInit {
     );
     if (this.selectedEnd) {
       if (this.selectedStart < this.selectedEnd) {
-        this.dateTimeRangeSelected.emit({ start: this.selectedStart, end: this.selectedEnd });
+        this.dateTimeRangeSelected.emit({
+          start: this.selectedStart,
+          end: this.selectedEnd
+        });
       } else {
         this.selectedEnd = null;
         this.openEnd = true;
@@ -74,7 +86,10 @@ export class DateTimeRangePickerComponent implements OnInit {
 
     if (this.selectedStart) {
       if (this.selectedStart < this.selectedEnd) {
-        this.dateTimeRangeSelected.emit({ start: this.selectedStart, end: this.selectedEnd });
+        this.dateTimeRangeSelected.emit({
+          start: this.selectedStart,
+          end: this.selectedEnd
+        });
       } else {
         this.selectedStart = null;
         this.openStart = true;
@@ -110,10 +125,16 @@ export class DateTimeRangePickerComponent implements OnInit {
     this.getMonthUnavailability(date)
       .pipe(take(1))
       .subscribe((unavailabilityToUse: DateTimeRange[]) => {
-        const isDateAfterSelectedStart = moment(date).isAfter(moment(this.selectedStart), 'minute');
+        const isDateAfterSelectedStart = moment(date).isAfter(
+          moment(this.selectedStart),
+          'minute'
+        );
         let blockEverything = false;
         if (this.startOfBlockEveryting) {
-          blockEverything = moment(date).isAfter(moment(this.startOfBlockEveryting), 'month');
+          blockEverything = moment(date).isAfter(
+            moment(this.startOfBlockEveryting),
+            'month'
+          );
         }
 
         if (isDateAfterSelectedStart) {
@@ -122,9 +143,15 @@ export class DateTimeRangePickerComponent implements OnInit {
           } else {
             const filteredUnavailabilities = [];
             for (const unavailability of unavailabilityToUse) {
-              if (moment(unavailability.start).isAfter(moment(this.selectedStart, 'minute'))) {
+              if (
+                moment(unavailability.start).isAfter(
+                  moment(this.selectedStart, 'minute')
+                )
+              ) {
                 filteredUnavailabilities.push(
-                  this.getUnavailabilityUntilTheEndOfTheMonth(unavailability.start)
+                  this.getUnavailabilityUntilTheEndOfTheMonth(
+                    unavailability.start
+                  )
                 );
                 this.startOfBlockEveryting = unavailability.start;
                 break;

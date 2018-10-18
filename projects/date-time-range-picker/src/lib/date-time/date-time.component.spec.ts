@@ -3,13 +3,13 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import * as moment_ from 'moment';
+import { of } from 'rxjs';
 import { DayComponent } from '../day/day.component';
 import { DateTimeRange } from '../models/date-time-range';
 import { MonthComponent } from '../month/month.component';
 import { TimeComponent } from '../time/time.component';
 import { DTRPTranslationService } from '../translation.service';
 import { DateTimeComponent } from './date-time.component';
-import {of} from "rxjs";
 const moment = moment_;
 
 describe('DateTimeComponent', () => {
@@ -20,7 +20,12 @@ describe('DateTimeComponent', () => {
     TestBed.configureTestingModule({
       imports: [FormsModule],
       providers: [DTRPTranslationService],
-      declarations: [DateTimeComponent, MonthComponent, DayComponent, TimeComponent]
+      declarations: [
+        DateTimeComponent,
+        MonthComponent,
+        DayComponent,
+        TimeComponent
+      ]
     })
       .overrideComponent(DateTimeComponent, {
         set: { changeDetection: ChangeDetectionStrategy.Default }
@@ -44,6 +49,35 @@ describe('DateTimeComponent', () => {
     const monthElement = fixture.debugElement.queryAll(By.css('ngx-month'));
 
     expect(monthElement.length).toBe(0);
+  });
+
+  it('should be readonly', () => {
+    const disabledInputs = fixture.debugElement.queryAll(
+      By.css('#datePicker[readonly]')
+    );
+    expect(disabledInputs.length).toBe(1);
+  });
+
+  it('should show a placeholder if that is enabled', () => {
+    component.labelsAsPlaceholders = true;
+    const placeholderToUse = 'begin';
+    component.placeholder = placeholderToUse;
+
+    fixture.detectChanges();
+
+    const input = fixture.debugElement.query(By.css('#datePicker'));
+    expect(input.nativeElement.placeholder).toBe(placeholderToUse);
+  });
+
+  it('should not show a placeholder if that is disabled', () => {
+    component.labelsAsPlaceholders = false;
+    const placeholderToUse = 'begin';
+    component.placeholder = placeholderToUse;
+
+    fixture.detectChanges();
+
+    const input = fixture.debugElement.query(By.css('#datePicker'));
+    expect(input.nativeElement.placeholder).toBe('');
   });
 
   it('should show a month if the parent component says so and the timePicker is not opened', () => {
@@ -81,19 +115,25 @@ describe('DateTimeComponent', () => {
   });
 
   it('should not be disabled by default', () => {
-    const disabledInputs = fixture.debugElement.queryAll(By.css('#datePicker[disabled]'));
+    const disabledInputs = fixture.debugElement.queryAll(
+      By.css('#datePicker[disabled]')
+    );
     expect(disabledInputs.length).toBe(0);
   });
 
   it('should be disabled if the parent component says so', () => {
     component.isDisabled = true;
     fixture.detectChanges();
-    const disabledInputs = fixture.debugElement.queryAll(By.css('#datePicker[disabled]'));
+    const disabledInputs = fixture.debugElement.queryAll(
+      By.css('#datePicker[disabled]')
+    );
     expect(disabledInputs.length).toBe(1);
   });
 
   it('should show a month when the user clicks the input', () => {
-    const datePickerInput = fixture.debugElement.queryAll(By.css('#datePicker'));
+    const datePickerInput = fixture.debugElement.queryAll(
+      By.css('#datePicker')
+    );
     expect(datePickerInput.length).toBe(1);
 
     datePickerInput[0].triggerEventHandler('click', null);
@@ -113,7 +153,7 @@ describe('DateTimeComponent', () => {
     component.selectedDate = new Date(2020, 1, 1, 13, 0);
     const timeElement = fixture.debugElement.query(By.css('#timePicker'));
 
-    expect(timeElement.nativeElement.value).not.toBe('...');
+    expect(timeElement.nativeElement.value).not.toBe('');
   });
 
   it('should not show the time if there is no preselection', () => {
@@ -124,11 +164,13 @@ describe('DateTimeComponent', () => {
     component.ngOnInit();
     const timeElement = fixture.debugElement.query(By.css('#timePicker'));
 
-    expect(timeElement.nativeElement.value).toBe('...');
+    expect(timeElement.nativeElement.value).toBe('');
   });
 
   it('should show a time when the user clicks the input', () => {
-    const timePickerInput = fixture.debugElement.queryAll(By.css('#timePicker'));
+    const timePickerInput = fixture.debugElement.queryAll(
+      By.css('#timePicker')
+    );
     expect(timePickerInput.length).toBe(1);
 
     timePickerInput[0].triggerEventHandler('click', null);
@@ -152,17 +194,44 @@ describe('DateTimeComponent', () => {
 
   it('should give time unavailabilities when a day-month is picked', () => {
     const unavailability: DateTimeRange[] = [
-      { start: new Date(2019, 11, 14, 10, 0), end: new Date(2019, 11, 14, 21, 0) },
-      { start: new Date(2019, 11, 16, 10, 0), end: new Date(2019, 11, 18, 18, 0) },
-      { start: new Date(2019, 11, 18, 10, 0), end: new Date(2019, 11, 21, 21, 0) },
-      { start: new Date(2019, 11, 25, 10, 0), end: new Date(2019, 11, 26, 11, 0) },
-      { start: new Date(2019, 11, 26, 16, 0), end: new Date(2019, 11, 26, 18, 0) },
-      { start: new Date(2019, 11, 26, 23, 0), end: new Date(2019, 11, 27, 11, 0) }
+      {
+        start: new Date(2019, 11, 14, 10, 0),
+        end: new Date(2019, 11, 14, 21, 0)
+      },
+      {
+        start: new Date(2019, 11, 16, 10, 0),
+        end: new Date(2019, 11, 18, 18, 0)
+      },
+      {
+        start: new Date(2019, 11, 18, 10, 0),
+        end: new Date(2019, 11, 21, 21, 0)
+      },
+      {
+        start: new Date(2019, 11, 25, 10, 0),
+        end: new Date(2019, 11, 26, 11, 0)
+      },
+      {
+        start: new Date(2019, 11, 26, 16, 0),
+        end: new Date(2019, 11, 26, 18, 0)
+      },
+      {
+        start: new Date(2019, 11, 26, 23, 0),
+        end: new Date(2019, 11, 27, 11, 0)
+      }
     ];
     const expectedTimeUnavailability: DateTimeRange[] = [
-      { start: new Date(2019, 11, 25, 10, 0), end: new Date(2019, 11, 26, 11, 0) },
-      { start: new Date(2019, 11, 26, 16, 0), end: new Date(2019, 11, 26, 18, 0) },
-      { start: new Date(2019, 11, 26, 23, 0), end: new Date(2019, 11, 27, 11, 0) }
+      {
+        start: new Date(2019, 11, 25, 10, 0),
+        end: new Date(2019, 11, 26, 11, 0)
+      },
+      {
+        start: new Date(2019, 11, 26, 16, 0),
+        end: new Date(2019, 11, 26, 18, 0)
+      },
+      {
+        start: new Date(2019, 11, 26, 23, 0),
+        end: new Date(2019, 11, 27, 11, 0)
+      }
     ];
     component.monthUnavailabilities = unavailability;
     component.ngOnInit();
@@ -207,24 +276,26 @@ describe('DateTimeComponent', () => {
     component.onTimeSelected({ hours: 20, minutes: 10 });
   });
 
-  it('should emit blocked times to time component when date changes', (done)=>{
+  it('should emit blocked times to time component when date changes', done => {
     const testDate = new Date(2017, 10, 10, 12, 30);
-    let calledOnce: boolean = false;
+    let calledOnce = false;
 
     component.getUnavailableTimesForDate = (date: Date) => {
-      return of([{
-        hour: date.getHours(),
-        minute: date.getMinutes(),
-        isBlocked: true
-      }]);
+      return of([
+        {
+          hour: date.getHours(),
+          minute: date.getMinutes(),
+          isBlocked: true
+        }
+      ]);
     };
 
-    component.unavailableTimesForDay.subscribe((times) => {
-      if(calledOnce) {
+    component.unavailableTimesForDay.subscribe(times => {
+      if (calledOnce) {
         expect(times[0].hour).toBe(12);
         expect(times[0].minute).toBe(30);
         done();
-      }else{
+      } else {
         calledOnce = true;
       }
     });

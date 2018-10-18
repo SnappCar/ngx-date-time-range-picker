@@ -35,6 +35,10 @@ export class DateTimeComponent implements OnInit, OnChanges {
   @Input()
   isDisabled: boolean;
   @Input()
+  labelsAsPlaceholders: boolean;
+  @Input()
+  placeholder: string;
+  @Input()
   set isOpen(shouldBeOpen: boolean) {
     if (shouldBeOpen) {
       if (!this.isTimePickerShown) {
@@ -148,6 +152,14 @@ export class DateTimeComponent implements OnInit, OnChanges {
     this.isDatePickerShown = false;
   }
 
+  public getDatePlaceholder(): string {
+    if (this.labelsAsPlaceholders) {
+      return this.placeholder;
+    }
+
+    return '';
+  }
+
   private setupSelectDateTime() {
     if (this.selectedDate) {
       this.activeMoment = moment(this.selectedDate);
@@ -187,6 +199,20 @@ export class DateTimeComponent implements OnInit, OnChanges {
           endMoment.isSame(selectedDay, 'day'))
       ) {
         newTimeUnavailabilities.push(unavailability);
+      }
+
+      if (this.startFrom && selectedDay.isSame(startMoment, 'day')) {
+        if (
+          selectedDay.isSame(this.startFrom, 'day') ||
+          selectedDay.isAfter(this.startFrom, 'day')
+        ) {
+          newTimeUnavailabilities.push({
+            start: startMoment.toDate(),
+            end: moment(startMoment)
+              .endOf('day')
+              .toDate()
+          });
+        }
       }
     }
 
