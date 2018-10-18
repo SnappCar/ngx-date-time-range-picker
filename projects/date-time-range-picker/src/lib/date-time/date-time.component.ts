@@ -188,6 +188,20 @@ export class DateTimeComponent implements OnInit, OnChanges {
       ) {
         newTimeUnavailabilities.push(unavailability);
       }
+
+      if (this.startFrom && selectedDay.isSame(startMoment, 'day')) {
+        if (
+          selectedDay.isSame(this.startFrom, 'day') ||
+          selectedDay.isAfter(this.startFrom, 'day')
+        ) {
+          newTimeUnavailabilities.push({
+            start: startMoment.toDate(),
+            end: moment(startMoment)
+              .endOf('day')
+              .toDate()
+          });
+        }
+      }
     }
 
     if (selectedDay.isSame(now, 'day')) {
