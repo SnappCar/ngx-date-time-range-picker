@@ -4,13 +4,13 @@
             [disabled]='isDisabled' [class.focused]='isDatePickerShown' [readonly]="true">
         <ngx-month *ngIf='isDatePickerShown' [unavailability]='monthUnavailabilities' [selectedDate]='selectedDate'
             [hoverFrom]='startFrom' (dateSelected)='onDayMonthSelected($event)' (monthChanged)='onMonthChanged($event)'
-            (dismissed)='hideDatePicker()'></ngx-month>
+            (dismissed)='dismissByClickOutside()'></ngx-month>
     </div>
 
     <div class="input-container time-container">
         <input type="text" id="timePicker" (click)='toggleTimePicker()' value="{{(timeSelected && (activeMoment | date:'shortTime')) || ''}}"
             [disabled]='!dateSelected || isDisabled' [class.focused]='isTimePickerShown' [readonly]="true">
         <ngx-time *ngIf='isTimePickerShown' [unavailabilities]='timeUnavailabilities' [unavailableTimes]="unavailableTimesForDay"
-            [selectedDate]='selectedDate' (timeSelected)='onTimeSelected($event)' (dismissed)='hideTimePicker()'></ngx-time>
+            [selectedDate]='selectedDate' (timeSelected)='onTimeSelected($event)' (dismissed)='dismissByClickOutside()'></ngx-time>
     </div>
 </div>
