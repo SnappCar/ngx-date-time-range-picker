@@ -41,7 +41,7 @@ fdescribe('MonthComponent', () => {
 
   describe('render', () => {
     it('should show the correct amount of days', () => {
-      const numberOfDays =  moment(component.selectedDate).daysInMonth();
+      const numberOfDays = moment(component.selectedDate).daysInMonth();
       fixture.detectChanges();
 
       const monthDays = fixture.debugElement.queryAll(By.css('.month-day'));
@@ -57,7 +57,9 @@ fdescribe('MonthComponent', () => {
 
     component.ngOnInit();
     fixture.detectChanges();
-    expect(component.monthChanged.emit).toHaveBeenCalledWith(new Date(2019, 1, 13));
+    expect(component.monthChanged.emit).toHaveBeenCalledWith(
+      new Date(2019, 1, 13)
+    );
   });
 
   it('should show the correct month and year', () => {
@@ -120,7 +122,7 @@ fdescribe('MonthComponent', () => {
 
     const daysAvailable = fixture.debugElement.queryAll(By.css('.available'));
 
-    expect(daysAvailable.length).toBe(21);
+    expect(daysAvailable.length).toBe(22);
   });
 
   it('should know when a day is partially available', () => {
@@ -150,7 +152,9 @@ fdescribe('MonthComponent', () => {
     component.unavailability = unavailabilityToUse;
     fixture.detectChanges();
 
-    const daysUnavailable = fixture.debugElement.queryAll(By.css('.unavailable'));
+    const daysUnavailable = fixture.debugElement.queryAll(
+      By.css('.unavailable')
+    );
 
     expect(daysUnavailable.length).toBe(21);
   });
@@ -184,7 +188,9 @@ fdescribe('MonthComponent', () => {
     component.hoverFrom = hoverToUse;
     fixture.detectChanges();
 
-    const daysUnavailable = fixture.debugElement.queryAll(By.css('.unavailable'));
+    const daysUnavailable = fixture.debugElement.queryAll(
+      By.css('.unavailable')
+    );
 
     expect(daysUnavailable.length).toBe(27);
   });
@@ -204,7 +210,9 @@ fdescribe('MonthComponent', () => {
       done();
     });
 
-    const previousMonthButton = fixture.debugElement.queryAll(By.css('.button-previous-month'));
+    const previousMonthButton = fixture.debugElement.queryAll(
+      By.css('.button-previous-month')
+    );
     expect(previousMonthButton.length).toBe(1);
 
     previousMonthButton[0].triggerEventHandler('click', null);
@@ -230,7 +238,9 @@ fdescribe('MonthComponent', () => {
       done();
     });
 
-    const nextMonthButton = fixture.debugElement.queryAll(By.css('.button-next-month'));
+    const nextMonthButton = fixture.debugElement.queryAll(
+      By.css('.button-next-month')
+    );
     expect(nextMonthButton.length).toBe(1);
 
     nextMonthButton[0].triggerEventHandler('click', null);
@@ -250,7 +260,9 @@ fdescribe('MonthComponent', () => {
 
     spyOn(component.dateSelected, 'emit').and.callThrough();
     component.dateSelected.subscribe((selectedDate: Date) => {
-      expect(selectedDate).toEqual(new Date(yearToUse, monthToUse, dayToSelect));
+      expect(selectedDate).toEqual(
+        new Date(yearToUse, monthToUse, dayToSelect)
+      );
     });
 
     component.daySelected(dayToSelect);
