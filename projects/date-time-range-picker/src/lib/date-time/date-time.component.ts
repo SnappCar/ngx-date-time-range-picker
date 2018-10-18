@@ -35,6 +35,10 @@ export class DateTimeComponent implements OnInit, OnChanges {
   @Input()
   isDisabled: boolean;
   @Input()
+  labelsAsPlaceholders: boolean;
+  @Input()
+  placeholder: string;
+  @Input()
   set isOpen(shouldBeOpen: boolean) {
     if (shouldBeOpen) {
       if (!this.isTimePickerShown) {
@@ -146,6 +150,14 @@ export class DateTimeComponent implements OnInit, OnChanges {
 
   public hideDatePicker(): void {
     this.isDatePickerShown = false;
+  }
+
+  public getDatePlaceholder(): string {
+    if (this.labelsAsPlaceholders) {
+      return this.placeholder;
+    }
+
+    return '';
   }
 
   private setupSelectDateTime() {

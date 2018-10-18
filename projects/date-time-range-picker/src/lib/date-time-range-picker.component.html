@@ -1,19 +1,19 @@
 <div class="dtrp-container">
     <div class="input-holder from">
-        <span class="input-label">
+        <span class="input-label" *ngIf='!labelsAsPlaceholders'>
             {{translationService.getTranslation('from')}}
         </span>
         <ngx-date-time [monthUnavailabilities]='startMonthUnavailability' [selectedDate]='selectedStart' (monthChanged)='onStartMonthChanged($event)'
-                       (dateTimeSelected)='onDateTimeFromSelected($event)' [isOpen]='openStart'
-                       [getUnavailableTimesForDate]="getUnavailableTimesForDate" (opened)='startOpened()'></ngx-date-time>
+            (dateTimeSelected)='onDateTimeFromSelected($event)' [isOpen]='openStart' [getUnavailableTimesForDate]="getUnavailableTimesForDate"
+            (opened)='startOpened()' [labelsAsPlaceholders]='labelsAsPlaceholders' [placeholder]="translationService.getTranslation('from')"></ngx-date-time>
     </div>
     <div class="input-holder to">
-        <span class="input-label">
+        <span class="input-label" *ngIf='!labelsAsPlaceholders'>
             {{translationService.getTranslation('until')}}
         </span>
         <ngx-date-time [monthUnavailabilities]='endMonthUnavailability' [selectedDate]='selectedEnd' [startFrom]='selectedStart'
-                       (monthChanged)='onEndMonthChanged($event)'
-                       [getUnavailableTimesForDate]="getUnavailableTimesForDate" (dateTimeSelected)='onDateTimeUntilSelected($event)' [isOpen]='openEnd'
-                       (opened)='endOpened()'></ngx-date-time>
+            (monthChanged)='onEndMonthChanged($event)' [getUnavailableTimesForDate]="getUnavailableTimesForDate"
+            (dateTimeSelected)='onDateTimeUntilSelected($event)' [isOpen]='openEnd' (opened)='endOpened()'
+            [labelsAsPlaceholders]='labelsAsPlaceholders' [placeholder]="translationService.getTranslation('until')"></ngx-date-time>
     </div>
 </div>
