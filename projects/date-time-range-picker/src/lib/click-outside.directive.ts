@@ -17,10 +17,17 @@ export class ClickOutsideDirective {
   public onClick(targetElement): void {
     const isDayBlock = targetElement.classList.contains('day-block');
     const isTimeBlock = targetElement.classList.contains('time-list-item');
+    const isRentButton = targetElement.classList.contains('rent-button');
     const isParentInput =
       targetElement.id === 'datePicker' || targetElement.id === 'timePicker';
     const clickedInside = this.elementRef.nativeElement.contains(targetElement);
-    if (!clickedInside && !isParentInput && !isDayBlock && !isTimeBlock) {
+    if (
+      !clickedInside &&
+      !isParentInput &&
+      !isDayBlock &&
+      !isTimeBlock &&
+      !isRentButton
+    ) {
       this.clickOutside.emit();
     }
   }

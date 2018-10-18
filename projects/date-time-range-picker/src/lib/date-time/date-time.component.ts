@@ -56,6 +56,8 @@ export class DateTimeComponent implements OnInit, OnChanges {
   dateTimeSelected = new EventEmitter<Date>();
   @Output()
   opened = new EventEmitter<void>();
+  @Output()
+  dismissed = new EventEmitter<void>();
 
   activeMoment: moment_.Moment;
 
@@ -150,6 +152,11 @@ export class DateTimeComponent implements OnInit, OnChanges {
 
   public hideDatePicker(): void {
     this.isDatePickerShown = false;
+  }
+
+  public dismissByClickOutside(): void {
+    this.isOpen = false;
+    this.dismissed.emit();
   }
 
   public getDatePlaceholder(): string {

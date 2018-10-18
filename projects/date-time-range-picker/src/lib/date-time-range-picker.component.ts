@@ -28,16 +28,19 @@ export class DateTimeRangePickerComponent implements OnInit {
   @Input()
   labelsAsPlaceholders: boolean;
   @Input()
+  openStart = false;
+  @Input()
   getMonthUnavailability: (date: Date) => Observable<DateTimeRange[]>;
   @Input()
   getUnavailableTimesForDate?: (date: Date) => Observable<TimeSegment[]>;
 
   @Output()
   dateTimeRangeSelected = new EventEmitter<DateTimeRange>();
+  @Output()
+  dismissed = new EventEmitter();
 
   startMonthUnavailability: DateTimeRange[];
   endMonthUnavailability: DateTimeRange[];
-  openStart = false;
   openEnd = false;
 
   private startOfBlockEveryting: Date;
@@ -119,6 +122,12 @@ export class DateTimeRangePickerComponent implements OnInit {
   endOpened(): void {
     this.openStart = false;
     this.openEnd = true;
+  }
+
+  onDimiss(): void {
+    this.dismissed.emit();
+    this.openStart = false;
+    this.openEnd = false;
   }
 
   private evaluateEndMonthUnavailability(date: Date) {
