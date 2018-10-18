@@ -5,7 +5,8 @@
         </span>
         <ngx-date-time [monthUnavailabilities]='startMonthUnavailability' [selectedDate]='selectedStart' (monthChanged)='onStartMonthChanged($event)'
             (dateTimeSelected)='onDateTimeFromSelected($event)' [isOpen]='openStart' [getUnavailableTimesForDate]="getUnavailableTimesForDate"
-            (opened)='startOpened()' [labelsAsPlaceholders]='labelsAsPlaceholders' [placeholder]="translationService.getTranslation('from')"></ngx-date-time>
+            (opened)='startOpened()' [labelsAsPlaceholders]='labelsAsPlaceholders' [placeholder]="translationService.getTranslation('from')"
+            (dismissed)='onDimiss()'></ngx-date-time>
     </div>
     <div class="input-holder to">
         <span class="input-label" *ngIf='!labelsAsPlaceholders'>
@@ -14,6 +15,7 @@
         <ngx-date-time [monthUnavailabilities]='endMonthUnavailability' [selectedDate]='selectedEnd' [startFrom]='selectedStart'
             (monthChanged)='onEndMonthChanged($event)' [getUnavailableTimesForDate]="getUnavailableTimesForDate"
             (dateTimeSelected)='onDateTimeUntilSelected($event)' [isOpen]='openEnd' (opened)='endOpened()'
-            [labelsAsPlaceholders]='labelsAsPlaceholders' [placeholder]="translationService.getTranslation('until')"></ngx-date-time>
+            [labelsAsPlaceholders]='labelsAsPlaceholders' [placeholder]="translationService.getTranslation('until')"
+            (dismissed)='onDimiss()'></ngx-date-time>
     </div>
 </div>
