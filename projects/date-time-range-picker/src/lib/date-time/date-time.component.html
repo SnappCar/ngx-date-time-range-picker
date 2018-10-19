@@ -11,6 +11,6 @@
         <input type="text" id="timePicker" (click)='toggleTimePicker()' value="{{(timeSelected && (activeMoment | date:'shortTime')) || ''}}"
             [disabled]='!dateSelected || isDisabled' [class.focused]='isTimePickerShown' [readonly]="true">
         <ngx-time *ngIf='isTimePickerShown' [unavailabilities]='timeUnavailabilities' [unavailableTimes]="unavailableTimesForDay"
-            [selectedDate]='selectedDate' (timeSelected)='onTimeSelected($event)' (dismissed)='dismissByClickOutside()'></ngx-time>
+            [selectedDate]='selectedDate' (timeSelected)='onTimeSelected($event)' (dismissed)='dismissTimeByClickOutside()'></ngx-time>
     </div>
 </div>
