@@ -162,11 +162,6 @@ export class DateTimeComponent implements OnInit, OnChanges {
     this.dismissed.emit();
   }
 
-  public dismissTimeByClickOutside(): void {
-    this.isOpen = false;
-    this.dismissed.emit();
-  }
-
   public getDatePlaceholder(): string {
     if (this.labelsAsPlaceholders) {
       return this.placeholder;
