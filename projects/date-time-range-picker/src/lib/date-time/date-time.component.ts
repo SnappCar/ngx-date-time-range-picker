@@ -71,6 +71,8 @@ export class DateTimeComponent implements OnInit, OnChanges {
   timeUnavailabilities: DateTimeRange[] = [];
   unavailableTimesForDay = new ReplaySubject<TimeSegment[]>();
 
+  private timeSelectedByUser = false;
+
   constructor() {}
 
   ngOnInit() {
@@ -82,7 +84,7 @@ export class DateTimeComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.setupSelectDateTime();
+    this.evaluateSelectDateTime();
   }
 
   emitUnavailableTimes() {
@@ -115,6 +117,7 @@ export class DateTimeComponent implements OnInit, OnChanges {
   }
 
   onTimeSelected(selectedTime: Time): void {
+    this.timeSelectedByUser = true;
     this.activeMoment = this.activeMoment
       .clone()
       .hour(selectedTime.hours)
@@ -169,10 +172,24 @@ export class DateTimeComponent implements OnInit, OnChanges {
 
   private setupSelectDateTime() {
     if (this.selectedDate) {
+      this.timeSelectedByUser = true;
       this.activeMoment = moment(this.selectedDate);
       this.dateSelected = true;
       this.timeSelected = true;
     } else {
+      this.activeMoment = null;
+      this.dateSelected = false;
+      this.timeSelected = false;
+    }
+  }
+
+  private evaluateSelectDateTime() {
+    if (this.selectedDate) {
+      this.activeMoment = moment(this.selectedDate);
+      this.dateSelected = true;
+      this.timeSelected = this.timeSelectedByUser ? true : false;
+    } else {
+      this.timeSelectedByUser = false;
       this.activeMoment = null;
       this.dateSelected = false;
       this.timeSelected = false;
