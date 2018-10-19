@@ -37,7 +37,7 @@ export class DateTimeRangePickerComponent implements OnInit {
   @Output()
   dateTimeRangeSelected = new EventEmitter<DateTimeRange>();
   @Output()
-  dismissed = new EventEmitter();
+  dismissed = new EventEmitter<DateTimeRange>();
 
   startMonthUnavailability: DateTimeRange[];
   endMonthUnavailability: DateTimeRange[];
@@ -125,7 +125,11 @@ export class DateTimeRangePickerComponent implements OnInit {
   }
 
   onDimiss(): void {
-    this.dismissed.emit();
+    const dismissedRange: DateTimeRange = {
+      start: this.selectedStart,
+      end: this.selectedEnd
+    };
+    this.dismissed.emit(dismissedRange);
     this.openStart = false;
     this.openEnd = false;
   }
