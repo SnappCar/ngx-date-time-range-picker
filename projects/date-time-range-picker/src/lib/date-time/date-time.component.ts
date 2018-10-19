@@ -194,6 +194,7 @@ export class DateTimeComponent implements OnInit, OnChanges {
       this.dateSelected = true;
       this.timeSelected = this.timeSelectedByUser ? true : false;
     } else {
+      this.timeSelectedByUser = false;
       this.activeMoment = null;
       this.dateSelected = false;
       this.timeSelected = false;
