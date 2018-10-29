@@ -122,7 +122,7 @@ fdescribe('MonthComponent', () => {
 
     const daysAvailable = fixture.debugElement.queryAll(By.css('.available'));
 
-    expect(daysAvailable.length).toBe(22);
+    expect(daysAvailable.length).toBe(21);
   });
 
   it('should know when a day is partially available', () => {
