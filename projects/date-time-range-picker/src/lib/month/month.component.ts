@@ -187,6 +187,10 @@ export class MonthComponent implements OnInit, OnChanges {
   private calculateDayAvailabilities() {
     let previousEndDate: moment_.Moment;
     for (const block of this.unavailability) {
+      if (moment(block.start).isAfter(this.activeMoment, 'month')) {
+        // The block is for a future month month
+        break;
+      }
       const startFreeDayNumber = previousEndDate ? previousEndDate.date() : 1;
       const endFreeDayNumber = moment(block.start).date();
       const startFullDayNumber = moment(block.start).date();
@@ -199,15 +203,20 @@ export class MonthComponent implements OnInit, OnChanges {
         block.end.getHours() === 23 &&
         block.end.getMinutes() >= 30
       ) {
+        // The block block also the start and end date
         this.fullDays.push(startFullDayNumber);
         this.fullDays.push(endFullDayNumber);
       } else {
+        // The start and end date are partially blocked
         this.partialDays.push(startFullDayNumber);
+        this.partialDays.push(endFullDayNumber);
       }
       if (moment(block.start).isBefore(moment(block.end), 'month')) {
+        // The block ends in a future month
         this.markRestOfTheDaysAsFull(startFullDayNumber);
         break;
       } else if (startFullDayNumber < endFullDayNumber) {
+        // The days completely inside the block are full
         this.addFullDays(startFullDayNumber + 1, endFullDayNumber);
       }
       previousEndDate = moment(block.end);
