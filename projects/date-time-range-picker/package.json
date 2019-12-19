@@ -1,11 +1,11 @@
 {
   "name": "@snappcar/date-time-range-picker",
-  "version": "1.7.2",
+  "version": "2.0.0",
   "peerDependencies": {
-    "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
-    "@angular/core": "^6.0.0-rc.0 || ^6.0.0",
-    "@angular/forms": "^6.0.3",
-    "@angular/cdk": "^6.4.1"
+    "@angular/common": "^8.2.14",
+    "@angular/core": "^8.2.14",
+    "@angular/forms": "^8.2.14",
+    "@angular/cdk": "^8.2.14"
   },
   "publishConfig": {
     "access": "public"
