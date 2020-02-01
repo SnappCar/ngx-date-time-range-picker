@@ -18,13 +18,15 @@ before_deploy:
   - cd dist/@snappcar/date-time-range-picker
 deploy:
   - provider: npm
-    skip-cleanup: true
+    edge: true
+    cleanup: false
     email: 'devops@snappcar.nl'
     api_key: $NPM_TOKEN
     on:
       branch: master
   - provider: pages
-    skip-cleanup: true
+    edge: true
+    cleanup: false
     github-token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
     local-dir: dist/date-time-range-picker-app
     on:
