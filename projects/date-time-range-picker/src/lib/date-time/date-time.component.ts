@@ -213,48 +213,54 @@ export class DateTimeComponent implements OnInit, OnChanges {
     const now = moment();
 
     for (const unavailability of this.monthUnavailabilities) {
-      const startMoment = moment(unavailability.start);
-      const endMoment = moment(unavailability.end);
+      const unavailabilityStartMoment = moment(unavailability.start);
+      const unavailabilityEndMoment = moment(unavailability.end);
 
       if (
-        (startMoment.isBefore(selectedDay, 'day') ||
-          startMoment.isSame(selectedDay, 'day')) &&
-        (endMoment.isAfter(selectedDay, 'day') ||
-          endMoment.isSame(selectedDay, 'day'))
+        (unavailabilityStartMoment.isBefore(selectedDay, 'day') ||
+          unavailabilityStartMoment.isSame(selectedDay, 'day')) &&
+        (unavailabilityEndMoment.isAfter(selectedDay, 'day') ||
+          unavailabilityEndMoment.isSame(selectedDay, 'day'))
       ) {
+        // Unavailability overlaps with the selected day
         newTimeUnavailabilities.push(unavailability);
       }
 
-      if (this.startFrom && selectedDay.isSame(startMoment, 'day')) {
-        if (
-          selectedDay.isSame(this.startFrom, 'day') ||
-          selectedDay.isAfter(this.startFrom, 'day')
-        ) {
-          newTimeUnavailabilities.push({
-            start: startMoment.toDate(),
-            end: moment(startMoment)
+      if (this.startFrom && selectedDay.isSame(unavailabilityStartMoment, 'day')) {
+        // There is an unavailability that starts today and we are now selecting the end date-time
+        // This means that if the startFrom is before the unavailabilityStart, all the times after the unavailabilityStart are unavailable
+        // ----------startFrom] ********* [unavailabilityStartMoment--------------
+        if (unavailabilityStartMoment.isAfter(this.startFrom)) {
+          const newTimeUnavailabilityBlock = {
+            start: unavailabilityStartMoment.toDate(),
+            end: moment(unavailabilityStartMoment)
               .endOf('day')
               .toDate()
-          });
+          };
+          newTimeUnavailabilities.push(newTimeUnavailabilityBlock);
         }
       }
     }
 
     if (selectedDay.isSame(now, 'day')) {
+      // Since the selected day is today, block the time of today until now.
       const startMoment = moment().startOf('day');
       const endMoment = moment().add(1, 'minutes');
-      newTimeUnavailabilities.push({
+      const newTimeUnavailabilityBlock = {
         start: startMoment.toDate(),
         end: endMoment.toDate()
-      });
+      };
+      newTimeUnavailabilities.push(newTimeUnavailabilityBlock);
     }
     if (selectedDay.isSame(this.startFrom, 'day')) {
+      // Since the selected day is the same as the startFrom, block the time before the startFrom
       const startMoment = moment(this.startFrom).startOf('day');
       const endMoment = moment(this.startFrom).add(1, 'minutes');
-      newTimeUnavailabilities.push({
+      const newTimeUnavailabilityBlock = {
         start: startMoment.toDate(),
         end: endMoment.toDate()
-      });
+      };
+      newTimeUnavailabilities.push(newTimeUnavailabilityBlock);
     }
 
     this.timeUnavailabilities = [...newTimeUnavailabilities];
