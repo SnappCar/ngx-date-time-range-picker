@@ -5,11 +5,8 @@ node_js:
 dist: trusty
 sudo: false
 
-cache:
-  directories:
-    - node_modules
-
 script:
+  - npm install
   - npm run test
   - npm run build_lib
   - npm run build:prod
