@@ -1,6 +1,6 @@
 {
   "name": "date-time-range-picker-app",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "scripts": {
     "build_lib": "ng build --prod date-time-range-picker",
     "npm_pack": "cd dist/@snappcar/date-time-range-picker && npm pack && cd ../..",
