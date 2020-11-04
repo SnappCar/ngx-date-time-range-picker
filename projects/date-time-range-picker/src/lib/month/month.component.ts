@@ -55,6 +55,7 @@ export class MonthComponent implements OnInit, OnChanges {
   constructor(public translationService: DTRPTranslationService) {}
 
   ngOnChanges() {
+    this.activeMoment = moment(this.selectedDate || undefined);
     this.assessAvailabilityPerDay();
     this.setupMonth();
   }
