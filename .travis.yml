@@ -1,18 +1,15 @@
 language: node_js
 version: 1.0
 node_js:
-  - '8'
+  - '10'
 dist: trusty
 sudo: false
 
-cache:
-  directories:
-    - node_modules
-
 script:
-  - yarn test
-  - yarn build_lib
-  - yarn build:prod
+  - npm install
+  - npm run test
+  - npm run build_lib
+  - npm run build:prod
 
 before_deploy:
   - cd dist/@snappcar/date-time-range-picker

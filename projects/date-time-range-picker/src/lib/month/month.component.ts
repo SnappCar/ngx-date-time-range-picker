@@ -6,7 +6,7 @@ import {
   OnChanges,
   OnInit,
   Output,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import * as moment_ from 'moment';
 import { DateTimeRange } from '../models/date-time-range';
@@ -20,7 +20,7 @@ const moment = moment_;
   templateUrl: './month.component.html',
   styleUrls: ['./month.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class MonthComponent implements OnInit, OnChanges {
   @Input()
@@ -42,6 +42,7 @@ export class MonthComponent implements OnInit, OnChanges {
   private partialDays: number[];
   private fullDays: number[];
 
+  // @ts-ignore
   private activeMoment: moment_.Moment = moment(this.selectedDate || undefined);
 
   // Computed values:
@@ -142,7 +143,7 @@ export class MonthComponent implements OnInit, OnChanges {
 
   private markSelectedDate() {
     if (this.activeMoment.isSame(moment(this.selectedDate), 'month')) {
-      this.days = this.days.map(day => {
+      this.days = this.days.map((day) => {
         if (day.value === this.selectedDate.getDate()) {
           day.status = DayState.Selected;
         }
@@ -178,9 +179,7 @@ export class MonthComponent implements OnInit, OnChanges {
       return !this.fullDays.includes(value);
     });
     this.freeDays = this.freeDays.filter((value: number) => {
-      return !(
-        this.partialDays.includes(value) || this.fullDays.includes(value)
-      );
+      return !(this.partialDays.includes(value) || this.fullDays.includes(value));
     });
   }
 
@@ -229,9 +228,7 @@ export class MonthComponent implements OnInit, OnChanges {
   }
 
   private markRestOfTheDaysAsFull(start: number) {
-    const endOfMonthDay = moment(this.activeMoment)
-      .endOf('month')
-      .date();
+    const endOfMonthDay = moment(this.activeMoment).endOf('month').date();
     this.addFullDays(start + 1, endOfMonthDay + 1);
   }
 
@@ -306,7 +303,7 @@ export class MonthComponent implements OnInit, OnChanges {
         value: 0,
         status: DayState.Dummy,
         hovered: false,
-        dummyBefore: true
+        dummyBefore: true,
       };
 
       dummyDaysBefore.push(newDay);
@@ -327,7 +324,7 @@ export class MonthComponent implements OnInit, OnChanges {
         value: 0,
         status: DayState.Dummy,
         hovered: false,
-        dummyAfter: true
+        dummyAfter: true,
       };
 
       dummyDaysAfter.push(newDay);

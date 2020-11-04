@@ -7,11 +7,11 @@ import {
   OnChanges,
   OnInit,
   Output,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import * as moment_ from 'moment';
 import { Observable, of, ReplaySubject } from 'rxjs';
-import { tap } from 'rxjs/internal/operators';
+import { tap } from 'rxjs/operators';
 import { DateTimeRange } from '../models/date-time-range';
 import { TimeSegment } from '../models/time-segment';
 const moment = moment_;
@@ -21,7 +21,7 @@ const moment = moment_;
   templateUrl: './date-time.component.html',
   styleUrls: ['./date-time.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class DateTimeComponent implements OnInit, OnChanges {
   @Input()
@@ -91,7 +91,7 @@ export class DateTimeComponent implements OnInit, OnChanges {
     if (this.selectedDate) {
       this.getUnavailableTimesForDate(this.selectedDate)
         .pipe(
-          tap(unavailableTimes => {
+          tap((unavailableTimes) => {
             this.unavailableTimesForDay.next(unavailableTimes);
           })
         )
@@ -233,9 +233,7 @@ export class DateTimeComponent implements OnInit, OnChanges {
         if (unavailabilityStartMoment.isAfter(this.startFrom)) {
           const newTimeUnavailabilityBlock = {
             start: unavailabilityStartMoment.toDate(),
-            end: moment(unavailabilityStartMoment)
-              .endOf('day')
-              .toDate()
+            end: moment(unavailabilityStartMoment).endOf('day').toDate(),
           };
           newTimeUnavailabilities.push(newTimeUnavailabilityBlock);
         }
@@ -248,7 +246,7 @@ export class DateTimeComponent implements OnInit, OnChanges {
       const endMoment = moment().add(1, 'minutes');
       const newTimeUnavailabilityBlock = {
         start: startMoment.toDate(),
-        end: endMoment.toDate()
+        end: endMoment.toDate(),
       };
       newTimeUnavailabilities.push(newTimeUnavailabilityBlock);
     }
@@ -258,7 +256,7 @@ export class DateTimeComponent implements OnInit, OnChanges {
       const endMoment = moment(this.startFrom).add(1, 'minutes');
       const newTimeUnavailabilityBlock = {
         start: startMoment.toDate(),
-        end: endMoment.toDate()
+        end: endMoment.toDate(),
       };
       newTimeUnavailabilities.push(newTimeUnavailabilityBlock);
     }
