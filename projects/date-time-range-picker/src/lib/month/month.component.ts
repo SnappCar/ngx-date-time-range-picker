@@ -42,7 +42,8 @@ export class MonthComponent implements OnInit, OnChanges {
   private partialDays: number[];
   private fullDays: number[];
 
-  private activeMoment: moment_.Moment;
+  // @ts-ignore
+  private activeMoment: moment_.Moment = moment(this.selectedDate || undefined);
 
   // Computed values:
   get monthName(): string {
@@ -55,7 +56,6 @@ export class MonthComponent implements OnInit, OnChanges {
   constructor(public translationService: DTRPTranslationService) {}
 
   ngOnChanges() {
-    this.activeMoment = moment(this.selectedDate || undefined);
     this.assessAvailabilityPerDay();
     this.setupMonth();
   }
