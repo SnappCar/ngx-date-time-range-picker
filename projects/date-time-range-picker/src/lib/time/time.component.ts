@@ -9,7 +9,7 @@ import {
   OnChanges,
   OnInit,
   Output,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import * as moment_ from 'moment';
 import { Subject } from 'rxjs';
@@ -24,7 +24,7 @@ const moment = moment_;
   templateUrl: './time.component.html',
   styleUrls: ['./time.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
   @Input()
@@ -77,8 +77,7 @@ export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
       let el: any;
       if (
         this.selectedTimeOption &&
-        (this.selectedTimeOption.minute === 0 ||
-          this.selectedTimeOption.minute === 30)
+        (this.selectedTimeOption.minute === 0 || this.selectedTimeOption.minute === 30)
       ) {
         el = document.getElementById(
           `${this.selectedTimeOption.hour}:${this.selectedTimeOption.minute}`
@@ -90,7 +89,7 @@ export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
         el.scrollIntoView({
           behavior: 'instant',
           block: 'center',
-          inline: 'nearest'
+          inline: 'nearest',
         });
       }
     }
@@ -123,39 +122,35 @@ export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
   private handleUnavailabilityWithinTheDay(unavailability: DateTimeRange): any {
     const startTime: Time = {
       hours: unavailability.start.getHours(),
-      minutes: unavailability.start.getMinutes()
+      minutes: unavailability.start.getMinutes(),
     };
     const endTime: Time = {
       hours: unavailability.end.getHours(),
-      minutes: unavailability.end.getMinutes()
+      minutes: unavailability.end.getMinutes(),
     };
     this.makeTimesBlocked(startTime, endTime);
   }
 
-  private handleUnavailabilityOverlappingEndOfDay(
-    unavailability: DateTimeRange
-  ): any {
+  private handleUnavailabilityOverlappingEndOfDay(unavailability: DateTimeRange): any {
     const startTime: Time = {
       hours: unavailability.start.getHours(),
-      minutes: unavailability.start.getMinutes()
+      minutes: unavailability.start.getMinutes(),
     };
     const endTime: Time = {
       hours: 23,
-      minutes: 59
+      minutes: 59,
     };
     this.makeTimesBlocked(startTime, endTime);
   }
 
-  private handleUnavailabilityOverlappingBeginOfDay(
-    unavailability: DateTimeRange
-  ): any {
+  private handleUnavailabilityOverlappingBeginOfDay(unavailability: DateTimeRange): any {
     const startTime: Time = {
       hours: 0,
-      minutes: 0
+      minutes: 0,
     };
     const endTime: Time = {
       hours: unavailability.end.getHours(),
-      minutes: unavailability.end.getMinutes()
+      minutes: unavailability.end.getMinutes(),
     };
     this.makeTimesBlocked(startTime, endTime);
   }
@@ -163,11 +158,11 @@ export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
   private handleUnavailabilityOverlappingFullDay(): any {
     const startTime: Time = {
       hours: 0,
-      minutes: 0
+      minutes: 0,
     };
     const endTime: Time = {
       hours: 23,
-      minutes: 59
+      minutes: 59,
     };
     this.makeTimesBlocked(startTime, endTime);
   }
@@ -176,20 +171,11 @@ export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
     this.timeOptions = this.timeOptions.map((timeOption: TimeSegment) => {
       if (this.checkIfBlock(timeOption.hour, timeOption.minute)) {
         timeOption.isBlocked = true;
-      } else if (
-        timeOption.hour === startTime.hours &&
-        timeOption.minute >= startTime.minutes
-      ) {
+      } else if (timeOption.hour === startTime.hours && timeOption.minute >= startTime.minutes) {
         timeOption.isBlocked = true;
-      } else if (
-        timeOption.hour === endTime.hours &&
-        timeOption.minute <= endTime.minutes
-      ) {
+      } else if (timeOption.hour === endTime.hours && timeOption.minute <= endTime.minutes) {
         timeOption.isBlocked = true;
-      } else if (
-        timeOption.hour > startTime.hours &&
-        timeOption.hour < endTime.hours
-      ) {
+      } else if (timeOption.hour > startTime.hours && timeOption.hour < endTime.hours) {
         timeOption.isBlocked = true;
       }
 
@@ -203,12 +189,12 @@ export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
       const fixedTimeSegment: TimeSegment = {
         hour: i,
         minute: 0,
-        isBlocked: this.checkIfBlock(i, 0)
+        isBlocked: this.checkIfBlock(i, 0),
       };
       const halfTimeSegment: TimeSegment = {
         hour: i,
         minute: 30,
-        isBlocked: this.checkIfBlock(i, 30)
+        isBlocked: this.checkIfBlock(i, 30),
       };
 
       times.push(fixedTimeSegment);
@@ -236,7 +222,7 @@ export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
       this.selectedTimeOption = {
         hour: this.selectedDate.getHours(),
         minute: this.selectedDate.getMinutes(),
-        isBlocked: false
+        isBlocked: false,
       } as TimeSegment;
     }
   }
@@ -244,7 +230,7 @@ export class TimeComponent implements OnInit, OnChanges, AfterViewInit {
   private initUnavailableTimes() {
     this.unavailableTimes
       .pipe(
-        tap(times => {
+        tap((times) => {
           this.alwaysUnavailableTimes = times;
           this.ngOnChanges();
         })
