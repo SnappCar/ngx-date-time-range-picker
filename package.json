@@ -1,6 +1,6 @@
 {
   "name": "date-time-range-picker-app",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "build_lib": "ng build --prod date-time-range-picker",
     "npm_pack": "cd dist/@snappcar/date-time-range-picker && npm pack && cd ../..",
@@ -49,6 +49,7 @@
     "tslib": "^2.0.3",
     "tslint": "~6.1.3",
     "typescript": "~4.0.5",
-    "ng-mocks": "10.5.1"
+    "ng-mocks": "10.5.1",
+    "prettier": "2.1.2"
   }
 }
