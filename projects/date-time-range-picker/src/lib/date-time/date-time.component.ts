@@ -71,15 +71,13 @@ export class DateTimeComponent implements OnInit, OnChanges {
   timeUnavailabilities: DateTimeRange[] = [];
   unavailableTimesForDay = new ReplaySubject<TimeSegment[]>();
 
-  private timeSelectedByUser = false;
-
   constructor() {}
 
   ngOnInit() {
     if (!this.getUnavailableTimesForDate) {
       this.getUnavailableTimesForDate = () => of([]);
     }
-    this.setupSelectDateTime();
+    this.setupSelectedDateTime();
     this.emitUnavailableTimes();
   }
 
@@ -117,7 +115,6 @@ export class DateTimeComponent implements OnInit, OnChanges {
   }
 
   onTimeSelected(selectedTime: Time): void {
-    this.timeSelectedByUser = true;
     this.activeMoment = this.activeMoment
       .clone()
       .hour(selectedTime.hours)
@@ -134,7 +131,6 @@ export class DateTimeComponent implements OnInit, OnChanges {
     this.activeMoment = moment(date);
     this.monthChanged.emit(date);
   }
-
   toggleDatePicker(): void {
     this.isDatePickerShown ? this.hideDatePicker() : this.showDatePicker();
     if (this.isDatePickerShown) {
@@ -157,8 +153,12 @@ export class DateTimeComponent implements OnInit, OnChanges {
     this.isDatePickerShown = false;
   }
 
-  public dismissByClickOutside(): void {
+  public dismissByClickOutside(emitNewValue = false): void {
     this.isOpen = false;
+    if (emitNewValue) {
+      this.selectedDate = this.activeMoment.toDate();
+      this.dateTimeSelected.emit(this.selectedDate);
+    }
     this.dismissed.emit();
   }
 
@@ -169,10 +169,8 @@ export class DateTimeComponent implements OnInit, OnChanges {
 
     return '';
   }
-
-  private setupSelectDateTime() {
+  private setupSelectedDateTime() {
     if (this.selectedDate) {
-      this.timeSelectedByUser = true;
       this.activeMoment = moment(this.selectedDate);
       this.dateSelected = true;
       this.timeSelected = true;
@@ -185,14 +183,22 @@ export class DateTimeComponent implements OnInit, OnChanges {
 
   private evaluateSelectDateTime() {
     if (this.selectedDate) {
-      this.activeMoment = moment(this.selectedDate);
+      this.adjustActiveMomentToNearestHalfHour();
       this.dateSelected = true;
-      this.timeSelected = this.timeSelectedByUser ? true : false;
+      this.timeSelected = true;
     } else {
-      this.timeSelectedByUser = false;
       this.activeMoment = null;
       this.dateSelected = false;
       this.timeSelected = false;
+    }
+  }
+
+  private adjustActiveMomentToNearestHalfHour() {
+    this.activeMoment = moment(this.selectedDate);
+    if (0 < this.activeMoment.minutes() && this.activeMoment.minutes() < 30) {
+      this.activeMoment = this.activeMoment.minutes(30);
+    } else if (30 < this.activeMoment.minutes() && this.activeMoment.minutes() <= 59) {
+      this.activeMoment = this.activeMoment.minutes(0);
     }
   }
 
