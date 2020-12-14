@@ -129,10 +129,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "projects/date-time-range-picker/tsconfig.lib.json",
-              "projects/date-time-range-picker/tsconfig.spec.json"
-            ],
+            "tsConfig": ["projects/date-time-range-picker/tsconfig.lib.json"],
             "exclude": ["**/node_modules/**"]
           }
         }
